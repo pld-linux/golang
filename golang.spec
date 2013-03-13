@@ -1,8 +1,11 @@
 # TODO
 # - allow disabling tests (currently bcond exists just for showing which are test deps)
+# - add verbose build output (currently dummy bcond)
+# - setup GOMAXPROCS=2 from _smp_mflags
 
 # Conditional build:
 %bcond_without	tests	# build without tests
+%bcond_without	verbose	# verbose build (V=1)
 
 Summary:	Go compiler and tools
 Name:		golang
@@ -15,7 +18,7 @@ Source0:	http://go.googlecode.com/files/go%{version}.src.tar.gz
 # Source0-md5:	31acddba58b4592242a3c3c16165866b
 BuildRequires:	bison
 BuildRequires:	ed
-BuildRequires:	mercurial
+BuildRequires:	rpm-pythonprov
 %if %{with tests}
 BuildRequires:	hostname
 %endif
@@ -63,6 +66,9 @@ Go mode for Emacs.
 
 %prep
 %setup -q -n go
+
+# broken tests
+rm src/pkg/net/multicast_test.go
 
 %build
 GOSRC=$(pwd)
