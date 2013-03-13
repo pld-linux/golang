@@ -1,3 +1,9 @@
+# TODO
+# - allow disabling tests (currently bcond exists just for showing which are test deps)
+
+# Conditional build:
+%bcond_without	tests	# build without tests
+
 Summary:	Go compiler and tools
 Name:		golang
 Version:	1.0.3
@@ -10,6 +16,9 @@ Source0:	http://go.googlecode.com/files/go%{version}.src.tar.gz
 BuildRequires:	bison
 BuildRequires:	ed
 BuildRequires:	mercurial
+%if %{with tests}
+BuildRequires:	hostname
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define _enable_debug_packages 0
