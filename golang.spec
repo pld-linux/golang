@@ -112,7 +112,7 @@ cp -p misc/emacs/go*.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
 
 VIMFILES="syntax/go.vim ftdetect/gofiletype.vim ftplugin/go/fmt.vim ftplugin/go/import.vim indent/go.vim"
 for i in $VIMFILES; do
-	install -Dp misc/vim/$i $RPM_BUILD_ROOT%{_vindatadir}/$i
+	install -Dp misc/vim/$i $RPM_BUILD_ROOT%{_vimdatadir}/$i
 done
 
 %clean
@@ -139,10 +139,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n vim-syntax-%{name}
 %defattr(644,root,root,755)
-%{_vindatadir}/ftdetect/gofiletype.vim
-%{_vindatadir}/ftplugin/go
-%{_vindatadir}/indent/go.vim
-%{_vindatadir}/syntax/go.vim
+%{_vimdatadir}/ftdetect/gofiletype.vim
+%{_vimdatadir}/ftplugin/go
+%{_vimdatadir}/indent/go.vim
+%{_vimdatadir}/syntax/go.vim
 
 %files -n emacs-%{name}
 %defattr(644,root,root,755)
