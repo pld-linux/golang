@@ -18,13 +18,15 @@ License:	BSD
 Group:		Development/Languages
 URL:		http://golang.org/
 Source0:	http://go.googlecode.com/files/go%{version}.src.tar.gz
+# Source0-md5:	31acddba58b4592242a3c3c16165866b
 BuildRequires:	bison
 BuildRequires:	ed
 BuildRequires:	mercurial
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Go is an open source programming environment that makes it easy to build simple, reliable, and efficient software. 
+Go is an open source programming environment that makes it easy to
+build simple, reliable, and efficient software.
 
 %package vim
 Summary:	go syntax files for vim
@@ -84,7 +86,7 @@ tools="8a 8c 8g 8l"
 %else
 tools="6a 6c 6g 6l"
 %endif
-for tool in $tools; do 
+for tool in $tools; do
   ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/$tool $RPM_BUILD_ROOT%{_bindir}/$tool
 done
 
@@ -108,7 +110,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS CONTRIBUTORS LICENSE README doc/*
-%{_bindir}/*
+%attr(755,root,root) %{_bindir}/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/bin
 %attr(755,root,root) %{_libdir}/%{name}/bin/*
