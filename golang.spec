@@ -1,15 +1,3 @@
-%define _enable_debug_packages 0
-%define no_install_post_strip 1
-%define no_install_post_chrpath 1
-%define _noautoreqfiles %{_libdir}/%{name}/src
-
-%ifarch %{ix86}
-  %global GOARCH 386
-%endif
-%ifarch %{x8664}
-  %global GOARCH amd64
-%endif
-
 Summary:	Go compiler and tools
 Name:		golang
 Version:	1.0.3
@@ -24,48 +12,68 @@ BuildRequires:	ed
 BuildRequires:	mercurial
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define _enable_debug_packages 0
+%define no_install_post_strip 1
+%define no_install_post_chrpath 1
+%define _noautoreqfiles %{_libdir}/%{name}/src
+
+%define		_vimdatadir	%{_datadir}/vim
+
+%ifarch %{ix86}
+%define	GOARCH 386
+%endif
+%ifarch %{x8664}
+%define	GOARCH amd64
+%endif
+
 %description
 Go is an open source programming environment that makes it easy to
 build simple, reliable, and efficient software.
 
-%package vim
+%package -n vim-syntax-%{name}
 Summary:	go syntax files for vim
 Group:		Applications/Editors
 Requires:	%{name} = %{version}-%{release}
+Requires:	vim-rt >= 4:7.2.170
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
-%description vim
+%description -n vim-syntax-%{name}
 Go syntax files for vim.
 
-%package emacs
+%package -n emacs-%{name}
 Summary:	go syntax files for emacs
 Group:		Applications/Editors
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
-%description emacs
+%description -n emacs-%{name}
 Go mode for Emacs.
 
 %prep
 %setup -q -n go
 
 %build
-GOSRC="$(pwd)"
-GOROOT="$(pwd)"
+GOSRC=$(pwd)
+GOROOT=$(pwd)
 GOROOT_FINAL=%{_libdir}/%{name}
 
 GOOS=linux
-GOBIN="$GOROOT/bin"
-GOARCH="%{GOARCH}"
+GOBIN=$GOROOT/bin
+GOARCH=%{GOARCH}
 export GOARCH GOROOT GOOS GOBIN GOROOT_FINAL
-export MAKE=%{__make}
+export MAKE="%{__make}"
 
-mkdir -p "$GOBIN"
+install -d "$GOBIN"
 cd src
 
 LC_ALL=C PATH="$PATH:$GOBIN" ./all.bash
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-GOROOT="$RPM_BUILD_ROOT%{_libdir}/%{name}"
+GOROOT=$RPM_BUILD_ROOT%{_libdir}/%{name}
 
 install -d $GOROOT/{misc,lib,src}
 install -d $RPM_BUILD_ROOT%{_bindir}
@@ -87,22 +95,16 @@ tools="8a 8c 8g 8l"
 tools="6a 6c 6g 6l"
 %endif
 for tool in $tools; do
-  ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/$tool $RPM_BUILD_ROOT%{_bindir}/$tool
+	ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/$tool $RPM_BUILD_ROOT%{_bindir}/$tool
 done
 
 install -d $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
-install misc/emacs/go*.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
+cp -p misc/emacs/go*.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
 
 VIMFILES="syntax/go.vim ftdetect/gofiletype.vim ftplugin/go/fmt.vim ftplugin/go/import.vim indent/go.vim"
 for i in $VIMFILES; do
-    install -D misc/vim/$i $RPM_BUILD_ROOT%{_datadir}/vim/vimfiles/$i
+	install -Dp misc/vim/$i $RPM_BUILD_ROOT%{_vindatadir}/$i
 done
-
-#install -D misc/vim/ftdetect/gofiletype.vim $RPM_BUILD_ROOT%{_datadir}/vim/vimfiles/ftdetect/gofiletype.vim
-#install -D misc/vim/ftplugin/go/fmt.vim $RPM_BUILD_ROOT%{_datadir}/vim/vimfiles/ftplugin/go/fmt.vim
-#install -D misc/vim/ftplugin/go/import.vim $RPM_BUILD_ROOT%{_datadir}/vim/vimfiles/ftplugin/go/import.vim
-#install -D misc/vim/indent/go.vim $RPM_BUILD_ROOT%{_datadir}/vim/vimfiles/indent/go.vim
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -126,14 +128,13 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/*
 
-%files vim
+%files vim-syntax-%{name}
 %defattr(644,root,root,755)
-%{_datadir}/vim/vimfiles/ftdetect/gofiletype.vim
-%{_datadir}/vim/vimfiles/ftplugin/go
-%{_datadir}/vim/vimfiles/indent/go.vim
-%{_datadir}/vim/vimfiles/syntax/go.vim
+%{_vindatadir}/ftdetect/gofiletype.vim
+%{_vindatadir}/ftplugin/go
+%{_vindatadir}/indent/go.vim
+%{_vindatadir}/syntax/go.vim
 
-%files emacs
+%files -n emacs-%{name}
 %defattr(644,root,root,755)
 %{_datadir}/emacs/site-lisp/go-mode*.el
-
