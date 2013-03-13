@@ -128,7 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/*
 
-%files vim-syntax-%{name}
+%files -n vim-syntax-%{name}
 %defattr(644,root,root,755)
 %{_vindatadir}/ftdetect/gofiletype.vim
 %{_vindatadir}/ftplugin/go
