@@ -14,6 +14,7 @@ Version:	1.0.3
 Release:	0.1
 License:	BSD
 Group:		Development/Languages
+#Source0Download: https://code.google.com/p/go/downloads/list
 Source0:	http://go.googlecode.com/files/go%{version}.src.tar.gz
 # Source0-md5:	31acddba58b4592242a3c3c16165866b
 URL:		http://golang.org/
