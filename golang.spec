@@ -23,6 +23,7 @@ BuildRequires:	rpm-pythonprov
 %if %{with tests}
 BuildRequires:	hostname
 %endif
+ExclusiveArch:	%{ix86} %{x8664} %{arm}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define _enable_debug_packages 0
@@ -93,6 +94,11 @@ GOBIN=$GOROOT/bin
 GOARCH=%{GOARCH}
 export GOARCH GOROOT GOOS GOBIN GOROOT_FINAL
 export MAKE="%{__make}"
+export CC="%{__cc}"
+# optflags for go tools build
+nflags="\"$(echo '%{rpmcflags}' | sed -e 's/^[ 	]*//;s/[ 	]*$//;s/[ 	]\+/ /g' -e 's/ /\",\"/g')\""
+%{__sed} -i -e "s/\"-O2\"/$nflags/" src/cmd/dist/build.c
+# NOTE: optflags used in gcc calls from go compiler are in src/cmd/go/build.go
 
 install -d "$GOBIN"
 cd src
@@ -119,8 +125,12 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/ebnflint $RPM_BUILD_ROOT%{_bi
 
 %ifarch %{ix86}
 tools="8a 8c 8g 8l"
-%else
+%endif
+%ifarch %{x8664}
 tools="6a 6c 6g 6l"
+%endif
+%ifarch %{arm}
+tools="5a 5c 5g 5l"
 %endif
 for tool in $tools; do
 	ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/$tool $RPM_BUILD_ROOT%{_bindir}/$tool
@@ -140,7 +150,29 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS CONTRIBUTORS LICENSE README doc/*
-%attr(755,root,root) %{_bindir}/*
+%ifarch %{arm}
+%attr(755,root,root) %{_bindir}/5a
+%attr(755,root,root) %{_bindir}/5c
+%attr(755,root,root) %{_bindir}/5g
+%attr(755,root,root) %{_bindir}/5l
+%endif
+%ifarch %{x8664}
+%attr(755,root,root) %{_bindir}/6a
+%attr(755,root,root) %{_bindir}/6c
+%attr(755,root,root) %{_bindir}/6g
+%attr(755,root,root) %{_bindir}/6l
+%endif
+%ifarch %{ix86}
+%attr(755,root,root) %{_bindir}/8a
+%attr(755,root,root) %{_bindir}/8c
+%attr(755,root,root) %{_bindir}/8g
+%attr(755,root,root) %{_bindir}/8l
+%endif
+%attr(755,root,root) %{_bindir}/cgo
+%attr(755,root,root) %{_bindir}/ebnflint
+%attr(755,root,root) %{_bindir}/go
+%attr(755,root,root) %{_bindir}/godoc
+%attr(755,root,root) %{_bindir}/gofmt
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/bin
 %attr(755,root,root) %{_libdir}/%{name}/bin/*
