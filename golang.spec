@@ -8,14 +8,15 @@
 %bcond_without	verbose	# verbose build (V=1)
 
 Summary:	Go compiler and tools
+Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
 Version:	1.0.3
 Release:	0.1
 License:	BSD
 Group:		Development/Languages
-URL:		http://golang.org/
 Source0:	http://go.googlecode.com/files/go%{version}.src.tar.gz
 # Source0-md5:	31acddba58b4592242a3c3c16165866b
+URL:		http://golang.org/
 BuildRequires:	bison
 BuildRequires:	ed
 BuildRequires:	rpm-pythonprov
@@ -42,8 +43,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Go is an open source programming environment that makes it easy to
 build simple, reliable, and efficient software.
 
+%description -l pl.UTF-8
+Go to mające otwarte źródła środowisko do programowania, pozwalające
+na łatwe tworzenie prostych, pewnych i wydajnych programów.
+
 %package -n vim-syntax-%{name}
-Summary:	go syntax files for vim
+Summary:	Go syntax files for Vim
+Summary(pl.UTF-8):	Pliki składni Go dla Vima
 Group:		Applications/Editors
 Requires:	%{name} = %{version}-%{release}
 Requires:	vim-rt >= 4:7.2.170
@@ -54,8 +60,12 @@ BuildArch:	noarch
 %description -n vim-syntax-%{name}
 Go syntax files for vim.
 
+%description -n vim-syntax-%{name} -l pl.UTF-8
+Pliki składni Go dla Vima.
+
 %package -n emacs-%{name}
-Summary:	go syntax files for emacs
+Summary:	Go mode for Emacs
+Summary(pl.UTF-8):	Tryb Go dla Emacsa
 Group:		Applications/Editors
 %if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
@@ -64,11 +74,14 @@ BuildArch:	noarch
 %description -n emacs-%{name}
 Go mode for Emacs.
 
+%description -n emacs-%{name} -l pl.UTF-8
+Tryb Go dla Emacsa.
+
 %prep
 %setup -q -n go
 
 # broken tests
-rm src/pkg/net/multicast_test.go
+%{__rm} src/pkg/net/multicast_test.go
 
 %build
 GOSRC=$(pwd)
