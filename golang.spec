@@ -28,6 +28,7 @@ BuildRequires:	mercurial
 BuildRequires:	rpm-pythonprov
 %if %{with tests}
 BuildRequires:	hostname
+BuildRequires:	tzdata
 %endif
 Requires:	ca-certificates
 ExclusiveArch:	%{ix86} %{x8664} %{arm}
