@@ -21,6 +21,7 @@ Source0:	https://go.googlecode.com/files/go%{version}.src.tar.gz
 # Source0-md5:	705feb2246c8ddaf820d7e171f1430c5
 Patch0:		ca-certs.patch
 URL:		http://golang.org/
+BuildRequires:	bash
 BuildRequires:	bison
 BuildRequires:	ed
 BuildRequires:	mercurial
@@ -114,27 +115,34 @@ mv go/* .
 # broken tests
 %{__rm} src/pkg/net/multicast_test.go
 
-%build
-GOSRC=$(pwd)
-GOROOT=$(pwd)
-GOROOT_FINAL=%{_libdir}/%{name}
+cat > env.sh <<'EOF'
+export GOROOT=$(pwd)
+export GOROOT_FINAL=%{_libdir}/%{name}
 
-GOOS=linux
-GOBIN=$GOROOT/bin
-GOARCH=%{GOARCH}
-export GOARCH GOROOT GOOS GOBIN GOROOT_FINAL
+export GOOS=linux
+export GOBIN=$GOROOT/bin
+export GOARCH=%{GOARCH}
+export GOROOT_FINAL
 export MAKE="%{__make}"
-export CC="%{__cc}"
-CC=${CC#ccache }
+CC="%{__cc}"
+export CC="${CC#ccache }"
+
+export PATH="$PATH:$GOBIN"
+EOF
+
+install -d bin
+
 # optflags for go tools build
 nflags="\"$(echo '%{rpmcflags}' | sed -e 's/^[ 	]*//;s/[ 	]*$//;s/[ 	]\+/ /g' -e 's/ /\",\"/g')\""
 %{__sed} -i -e "s/\"-O2\"/$nflags/" src/cmd/dist/build.c
 # NOTE: optflags used in gcc calls from go compiler are in src/cmd/go/build.go
 
-install -d "$GOBIN"
-cd src
 
-LC_ALL=C PATH="$PATH:$GOBIN" ./all.bash
+%build
+. ./env.sh
+
+cd src
+./all.bash
 
 %install
 rm -rf $RPM_BUILD_ROOT
