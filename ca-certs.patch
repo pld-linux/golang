@@ -1,0 +1,10 @@
+--- go-1.1.2/src/pkg/crypto/x509/root_unix.go~	2013-08-13 08:45:24.000000000 +0300
++++ go-1.1.2/src/pkg/crypto/x509/root_unix.go	2013-08-21 20:45:30.044974438 +0300
+@@ -10,6 +10,7 @@
+ 
+ // Possible certificate files; stop after finding one.
+ var certFiles = []string{
++	"/etc/certs/ca-certificates.crt",         // PLD Linux
+ 	"/etc/ssl/certs/ca-certificates.crt",     // Linux etc
+ 	"/etc/pki/tls/certs/ca-bundle.crt",       // Fedora/RHEL
+ 	"/etc/ssl/ca-bundle.pem",                 // OpenSUSE

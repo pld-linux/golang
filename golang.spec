@@ -13,12 +13,13 @@ Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
 Version:	1.1.2
-Release:	0.1
+Release:	0.2
 License:	BSD
 Group:		Development/Languages
 #Source0Download: https://code.google.com/p/go/downloads/list
 Source0:	https://go.googlecode.com/files/go%{version}.src.tar.gz
 # Source0-md5:	705feb2246c8ddaf820d7e171f1430c5
+Patch0:		ca-certs.patch
 URL:		http://golang.org/
 BuildRequires:	bison
 BuildRequires:	ed
@@ -27,6 +28,7 @@ BuildRequires:	rpm-pythonprov
 %if %{with tests}
 BuildRequires:	hostname
 %endif
+Requires:	ca-certificates
 ExclusiveArch:	%{ix86} %{x8664} %{arm}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -83,7 +85,9 @@ Go mode for Emacs.
 Tryb Go dla Emacsa.
 
 %prep
-%setup -q -n go
+%setup -qc
+mv go/* .
+%patch0 -p1
 
 # broken tests
 %{__rm} src/pkg/net/multicast_test.go
