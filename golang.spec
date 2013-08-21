@@ -190,7 +190,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{name}/pkg/tool
 %dir %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/*
-
+%ifarch %{x8664}
 %dir %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/*.a
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/regexp
@@ -198,6 +198,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/sync
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/text
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/unicode
+%endif
 
 %files -n vim-syntax-%{name}
 %defattr(644,root,root,755)
