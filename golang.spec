@@ -2,6 +2,7 @@
 # - allow disabling tests (currently bcond exists just for showing which are test deps)
 # - add verbose build output (currently dummy bcond)
 # - setup GOMAXPROCS=2 from _smp_mflags
+# - fix CC containing spaces (ccache)
 
 # Conditional build:
 %bcond_without	tests	# build without tests
@@ -10,13 +11,13 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.0.3
+Version:	1.1.2
 Release:	0.1
 License:	BSD
 Group:		Development/Languages
 #Source0Download: https://code.google.com/p/go/downloads/list
-Source0:	http://go.googlecode.com/files/go%{version}.src.tar.gz
-# Source0-md5:	31acddba58b4592242a3c3c16165866b
+Source0:	https://go.googlecode.com/files/go%{version}.src.tar.gz
+# Source0-md5:	705feb2246c8ddaf820d7e171f1430c5
 URL:		http://golang.org/
 BuildRequires:	bison
 BuildRequires:	ed
@@ -96,6 +97,7 @@ GOARCH=%{GOARCH}
 export GOARCH GOROOT GOOS GOBIN GOROOT_FINAL
 export MAKE="%{__make}"
 export CC="%{__cc}"
+CC=${CC#ccache }
 # optflags for go tools build
 nflags="\"$(echo '%{rpmcflags}' | sed -e 's/^[ 	]*//;s/[ 	]*$//;s/[ 	]\+/ /g' -e 's/ /\",\"/g')\""
 %{__sed} -i -e "s/\"-O2\"/$nflags/" src/cmd/dist/build.c
@@ -188,6 +190,14 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{name}/pkg/tool
 %dir %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/*
+
+%dir %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/*.a
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/regexp
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/runtime
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/sync
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/text
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/unicode
 
 %files -n vim-syntax-%{name}
 %defattr(644,root,root,755)
