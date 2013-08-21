@@ -13,7 +13,7 @@ Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
 Version:	1.1.2
-Release:	0.2
+Release:	1
 License:	BSD
 Group:		Development/Languages
 #Source0Download: https://code.google.com/p/go/downloads/list
@@ -53,6 +53,28 @@ build simple, reliable, and efficient software.
 %description -l pl.UTF-8
 Go to mające otwarte źródła środowisko do programowania, pozwalające
 na łatwe tworzenie prostych, pewnych i wydajnych programów.
+
+%package doc
+Summary:	Manual for go
+Summary(fr.UTF-8):	Documentation pour go
+Summary(it.UTF-8):	Documentazione di go
+Summary(pl.UTF-8):	Podręcznik dla go
+Group:		Documentation
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
+
+%description doc
+Documentation for go.
+
+%description doc -l fr.UTF-8
+Documentation pour go.
+
+%description doc -l it.UTF-8
+Documentazione di go.
+
+%description doc -l pl.UTF-8
+Dokumentacja do go.
 
 %package -n vim-syntax-%{name}
 Summary:	Go syntax files for Vim
@@ -158,7 +180,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS CONTRIBUTORS LICENSE README doc/*
+%doc AUTHORS CONTRIBUTORS LICENSE README
 %ifarch %{arm}
 %attr(755,root,root) %{_bindir}/5a
 %attr(755,root,root) %{_bindir}/5c
@@ -206,6 +228,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/text
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/unicode
 %endif
+
+%files doc
+%defattr(644,root,root,755)
+%doc doc/*
 
 %files -n vim-syntax-%{name}
 %defattr(644,root,root,755)
