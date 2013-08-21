@@ -22,9 +22,6 @@ Source0:	https://go.googlecode.com/files/go%{version}.src.tar.gz
 Patch0:		ca-certs.patch
 URL:		http://golang.org/
 BuildRequires:	bash
-BuildRequires:	bison
-BuildRequires:	ed
-BuildRequires:	mercurial
 BuildRequires:	rpm-pythonprov
 %if %{with tests}
 BuildRequires:	hostname
