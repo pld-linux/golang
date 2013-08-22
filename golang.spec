@@ -93,7 +93,6 @@ Dokumentacja do go.
 Summary:	Go syntax files for Vim
 Summary(pl.UTF-8):	Pliki składni Go dla Vima
 Group:		Applications/Editors
-Requires:	%{name} = %{version}-%{release}
 Requires:	vim-rt >= 4:7.2.170
 %if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
