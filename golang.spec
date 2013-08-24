@@ -53,20 +53,6 @@ build simple, reliable, and efficient software.
 Go to mające otwarte źródła środowisko do programowania, pozwalające
 na łatwe tworzenie prostych, pewnych i wydajnych programów.
 
-%package source
-Summary:	Source code of go
-Summary(pl.UTF-8):	Kod źródłowy go
-Group:		Documentation
-%if "%{_rpmversion}" >= "5"
-BuildArch:	noarch
-%endif
-
-%description source
-Source code of go.
-
-%description source -l pl.UTF-8
-Kod źródłowy go.
-
 %package doc
 Summary:	Manual for go
 Summary(fr.UTF-8):	Documentation pour go
@@ -123,8 +109,6 @@ Tryb Go dla Emacsa.
 mv go/* .
 %patch0 -p1
 
-%{__sed} -i -e 's,/usr/bin/awk,/bin/awk,' src/cmd/gc/bisonerrors
-
 # broken tests
 %{__rm} src/pkg/net/multicast_test.go
 
@@ -161,11 +145,11 @@ cd src
 rm -rf $RPM_BUILD_ROOT
 GOROOT=$RPM_BUILD_ROOT%{_libdir}/%{name}
 
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_usrsrc}/%{name}-%{version}} \
-	$GOROOT/{misc,lib}
+install -d $GOROOT/{misc,lib,src}
+install -d $RPM_BUILD_ROOT%{_bindir}
 
 cp -a pkg include lib bin $GOROOT
-cp -a src/pkg src/cmd $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
+cp -a src/pkg src/cmd $GOROOT/src
 cp -a misc/cgo $GOROOT/misc
 
 ln -sf %{_libdir}/%{name}/bin/go $RPM_BUILD_ROOT%{_bindir}/go
@@ -232,6 +216,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/include
 %{_libdir}/%{name}/lib
 %{_libdir}/%{name}/misc
+%{_libdir}/%{name}/src
 %dir %{_libdir}/%{name}/pkg
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}
 %{_libdir}/%{name}/pkg/obj
@@ -248,10 +233,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/text
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/unicode
 %endif
-
-%files source
-%defattr(644,root,root,755)
-%{_usrsrc}/%{name}-%{version}
 
 %files doc
 %defattr(644,root,root,755)
