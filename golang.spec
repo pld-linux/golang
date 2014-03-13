@@ -12,13 +12,13 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.1.2
+Version:	1.2.1
 Release:	1
 License:	BSD
 Group:		Development/Languages
 #Source0Download: https://code.google.com/p/go/downloads/list
 Source0:	https://go.googlecode.com/files/go%{version}.src.tar.gz
-# Source0-md5:	705feb2246c8ddaf820d7e171f1430c5
+# Source0-md5:	6232fa4417004fc9dde823ad1eaf597c
 Patch0:		ca-certs.patch
 URL:		http://golang.org/
 BuildRequires:	bash
@@ -31,12 +31,10 @@ Requires:	ca-certificates
 ExclusiveArch:	%{ix86} %{x8664} %{arm}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define _enable_debug_packages 0
 %define no_install_post_strip 1
 %define no_install_post_chrpath 1
+%define _enable_debug_packages 0
 %define _noautoreqfiles %{_libdir}/%{name}/src
-
-%define		_vimdatadir	%{_datadir}/vim
 
 %ifarch %{ix86}
 %define	GOARCH 386
@@ -44,6 +42,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %ifarch %{x8664}
 %define	GOARCH amd64
 %endif
+
+%define		_vimdatadir	%{_datadir}/vim
 
 %description
 Go is an open source programming environment that makes it easy to
@@ -133,7 +133,6 @@ install -d bin
 nflags="\"$(echo '%{rpmcflags}' | sed -e 's/^[ 	]*//;s/[ 	]*$//;s/[ 	]\+/ /g' -e 's/ /\",\"/g')\""
 %{__sed} -i -e "s/\"-O2\"/$nflags/" src/cmd/dist/build.c
 # NOTE: optflags used in gcc calls from go compiler are in src/cmd/go/build.go
-
 
 %build
 . ./env.sh
@@ -227,6 +226,13 @@ rm -rf $RPM_BUILD_ROOT
 %ifarch %{x8664}
 %dir %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/*.a
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/crypto
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/debug
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/encoding
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/go
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/io
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/os
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/path
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/regexp
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/runtime
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/sync
