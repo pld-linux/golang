@@ -12,13 +12,13 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.2.1
+Version:	1.3.3
 Release:	1
 License:	BSD
 Group:		Development/Languages
 #Source0Download: https://code.google.com/p/go/downloads/list
-Source0:	https://go.googlecode.com/files/go%{version}.src.tar.gz
-# Source0-md5:	6232fa4417004fc9dde823ad1eaf597c
+Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
+# Source0-md5:	2cdbad6baefcf1007f3cf54a5bc878b7
 Patch0:		ca-certs.patch
 URL:		http://golang.org/
 BuildRequires:	bash
