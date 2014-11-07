@@ -31,10 +31,10 @@ Requires:	ca-certificates
 ExclusiveArch:	%{ix86} %{x8664} %{arm}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define no_install_post_strip 1
-%define no_install_post_chrpath 1
-%define _enable_debug_packages 0
-%define _noautoreqfiles %{_libdir}/%{name}/src
+%define		no_install_post_strip	1
+%define		no_install_post_chrpath	1
+%define		_enable_debug_packages	0
+%define		_noautoreqfiles		%{_libdir}/%{name}/src
 
 %ifarch %{ix86}
 %define	GOARCH 386
@@ -150,6 +150,8 @@ install -d $RPM_BUILD_ROOT%{_bindir}
 cp -a pkg include lib bin $GOROOT
 cp -a src/pkg src/cmd $GOROOT/src
 cp -a misc/cgo $GOROOT/misc
+# kill Win32 and Plan9 scripts
+find $GOROOT -name '*.bat' -o -name '*.rc' | xargs %{__rm}
 
 ln -sf %{_libdir}/%{name}/bin/go $RPM_BUILD_ROOT%{_bindir}/go
 ln -sf %{_libdir}/%{name}/bin/godoc $RPM_BUILD_ROOT%{_bindir}/godoc
