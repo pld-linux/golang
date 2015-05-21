@@ -4,23 +4,25 @@
 # - setup GOMAXPROCS=2 from _smp_mflags
 # - fix CC containing spaces (ccache)
 # - check if hg use at build time can be dropped
+# - build all target archs, subpackage them: http://golang.org/doc/install/source#environment
+# - subpackage -src files?
 
 # Conditional build:
 %bcond_without	tests	# build without tests
 %bcond_without	verbose	# verbose build (V=1)
-%bcond_without	emacs	# Go mode for Emacs
-%bcond_without	vim	# Go syntax files for Vim
+%bcond_with	emacs	# Go mode for Emacs
+%bcond_with	vim	# Go syntax files for Vim
 
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.3.3
-Release:	1
+Version:	1.4.2
+Release:	0.1
 License:	BSD
 Group:		Development/Languages
-#Source0Download: https://code.google.com/p/go/downloads/list
+# Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	2cdbad6baefcf1007f3cf54a5bc878b7
+# Source0-md5:	907f85c8fa765d31f7f955836fec4049
 Patch0:		ca-certs.patch
 URL:		http://golang.org/
 BuildRequires:	bash
@@ -111,9 +113,6 @@ Tryb Go dla Emacsa.
 mv go/* .
 %patch0 -p1
 
-# broken tests
-%{__rm} src/pkg/net/multicast_test.go
-
 cat > env.sh <<'EOF'
 export GOROOT=$(pwd)
 export GOROOT_FINAL=%{_libdir}/%{name}
@@ -149,8 +148,7 @@ GOROOT=$RPM_BUILD_ROOT%{_libdir}/%{name}
 install -d $GOROOT/{misc,lib,src}
 install -d $RPM_BUILD_ROOT%{_bindir}
 
-cp -a pkg include lib bin $GOROOT
-cp -a src/pkg src/cmd $GOROOT/src
+cp -a pkg include lib bin src $GOROOT
 cp -a misc/cgo $GOROOT/misc
 # kill Win32 and Plan9 scripts
 find $GOROOT -name '*.bat' -o -name '*.rc' | xargs %{__rm}
@@ -234,11 +232,18 @@ rm -rf $RPM_BUILD_ROOT
 %ifarch %{x8664}
 %dir %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/*.a
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/compress
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/container
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/crypto
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/debug
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/encoding
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/go
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/hash
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/internal
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/io
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/math
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/mime
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/net
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/os
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/path
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/regexp

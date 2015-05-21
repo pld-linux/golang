@@ -1,5 +1,5 @@
---- golang-1.2.1/src/pkg/crypto/x509/root_unix.go~	2014-03-03 02:57:17.000000000 +0200
-+++ golang-1.2.1/src/pkg/crypto/x509/root_unix.go	2014-03-13 10:20:37.213363038 +0200
+--- golang-1.4.2/src/crypto/x509/root_unix.go~	2015-05-21 11:15:20.000000000 +0300
++++ golang-1.4.2/src/crypto/x509/root_unix.go	2015-05-21 11:15:26.427510756 +0300
 @@ -10,6 +10,7 @@
  
  // Possible certificate files; stop after finding one.
