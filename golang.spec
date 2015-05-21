@@ -8,6 +8,8 @@
 # Conditional build:
 %bcond_without	tests	# build without tests
 %bcond_without	verbose	# verbose build (V=1)
+%bcond_without	emacs	# Go mode for Emacs
+%bcond_without	vim	# Go syntax files for Vim
 
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
@@ -173,13 +175,17 @@ for tool in $tools; do
 	ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/$tool $RPM_BUILD_ROOT%{_bindir}/$tool
 done
 
+%if %{with emacs}
 install -d $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
 cp -p misc/emacs/go*.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
+%endif
 
+%if %{with vim}
 VIMFILES="syntax/go.vim ftdetect/gofiletype.vim ftplugin/go/fmt.vim ftplugin/go/import.vim indent/go.vim"
 for i in $VIMFILES; do
 	install -Dp misc/vim/$i $RPM_BUILD_ROOT%{_vimdatadir}/$i
 done
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -246,13 +252,17 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/*
 
+%if %{with vim}
 %files -n vim-syntax-%{name}
 %defattr(644,root,root,755)
 %{_vimdatadir}/ftdetect/gofiletype.vim
 %{_vimdatadir}/ftplugin/go
 %{_vimdatadir}/indent/go.vim
 %{_vimdatadir}/syntax/go.vim
+%endif
 
+%if %{with emacs}
 %files -n emacs-%{name}
 %defattr(644,root,root,755)
 %{_datadir}/emacs/site-lisp/go-mode*.el
+%endif
