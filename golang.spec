@@ -8,7 +8,7 @@
 # - subpackage -src files?
 
 # Conditional build:
-%bcond_without	tests	# build without tests
+%bcond_without	tests	# build without tests [nop actually]
 %bcond_without	verbose	# verbose build (V=1)
 %bcond_with	emacs	# Go mode for Emacs
 %bcond_with	vim	# Go syntax files for Vim
@@ -17,13 +17,14 @@ Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
 Version:	1.4.2
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
 # Source0-md5:	907f85c8fa765d31f7f955836fec4049
 Patch0:		ca-certs.patch
+Patch1:		%{name}-binutils.patch
 URL:		http://golang.org/
 BuildRequires:	bash
 BuildRequires:	rpm-pythonprov
@@ -112,6 +113,7 @@ Tryb Go dla Emacsa.
 %setup -qc
 mv go/* .
 %patch0 -p1
+%patch1 -p1
 
 cat > env.sh <<'EOF'
 export GOROOT=$(pwd)

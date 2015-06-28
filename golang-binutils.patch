@@ -1,0 +1,10 @@
+--- golang-1.4.2/src/cmd/cgo/gcc.go.orig	2015-02-18 05:38:34.000000000 +0100
++++ golang-1.4.2/src/cmd/cgo/gcc.go	2015-06-28 11:34:02.057120270 +0200
+@@ -764,6 +764,7 @@
+ 		"-gdwarf-2",   // generate DWARF v2 debugging symbols
+ 		"-c",          // do not link
+ 		"-xc",         // input language is C
++		"-Wa,--compress-debug-sections=none",	// do not compress debug sections
+ 	)
+ 	if strings.Contains(c[0], "clang") {
+ 		c = append(c,
