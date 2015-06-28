@@ -4,7 +4,7 @@
  		"-gdwarf-2",   // generate DWARF v2 debugging symbols
  		"-c",          // do not link
  		"-xc",         // input language is C
-+		"-Wa,--compress-debug-sections=none",	// do not compress debug sections
++		"-Wa,--nocompress-debug-sections",	// do not compress debug sections
  	)
  	if strings.Contains(c[0], "clang") {
  		c = append(c,
