@@ -8,3 +8,30 @@
  	)
  	if strings.Contains(c[0], "clang") {
  		c = append(c,
+--- golang-1.4.3/src/cmd/ld/ldelf.c.orig	2015-09-23 06:37:36.000000000 +0200
++++ golang-1.4.3/src/cmd/ld/ldelf.c	2016-02-02 20:45:59.791651383 +0100
+@@ -894,6 +894,10 @@
+ 	case R('8', R_386_PLT32):
+ 	case R('8', R_386_GOTOFF):
+ 	case R('8', R_386_GOTPC):
++#ifndef R_386_GOT32X
++#define R_386_GOT32X 43
++#endif
++	case R('8', R_386_GOT32X):
+ 		*siz = 4;
+ 		break;
+ 	case R('6', R_X86_64_64):
+--- golang-1.4.3/src/cmd/8l/asm.c.orig	2015-09-23 06:37:36.000000000 +0200
++++ golang-1.4.3/src/cmd/8l/asm.c	2016-02-02 21:07:25.341597434 +0100
+@@ -114,7 +114,11 @@
+ 		}
+ 		return;		
+ 	
++#ifndef R_386_GOT32X
++#define R_386_GOT32X 43
++#endif
+ 	case 256 + R_386_GOT32:
++	case 256 + R_386_GOT32X:
+ 		if(targ->type != SDYNIMPORT) {
+ 			// have symbol
+ 			if(r->off >= 2 && s->p[r->off-2] == 0x8b) {
