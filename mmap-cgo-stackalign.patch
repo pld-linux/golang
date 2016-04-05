@@ -1,0 +1,45 @@
+# Resolves https://bugzilla.redhat.com/show_bug.cgi?id=1304591
+# https://github.com/golang/go/issues/14384
+From 315f4c70f123cfbf061d097543af555547acd9c7 Mon Sep 17 00:00:00 2001
+From: Shenghou Ma <minux@golang.org>
+Date: Thu, 18 Feb 2016 16:29:39 -0500
+Subject: [PATCH] runtime: use correct psABI SP alignment before calling libc
+ mmap
+
+Fixes #14384.
+
+Change-Id: Ib025cf2d20754b4c2db52f0a8a4717fd303371d6
+Reviewed-on: https://go-review.googlesource.com/19660
+Run-TryBot: Minux Ma <minux@golang.org>
+TryBot-Result: Gobot Gobot <gobot@golang.org>
+Reviewed-by: Ian Lance Taylor <iant@golang.org>
+Reviewed-by: Austin Clements <austin@google.com>
+---
+ src/runtime/sys_linux_amd64.s | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/runtime/sys_linux_amd64.s b/src/runtime/sys_linux_amd64.s
+index aed85cb..f407078 100644
+--- a/src/runtime/sys_linux_amd64.s
++++ b/src/runtime/sys_linux_amd64.s
+@@ -258,7 +258,7 @@ TEXT runtime·sysMmap(SB),NOSPLIT,$0
+ 
+ // Call the function stored in _cgo_mmap using the GCC calling convention.
+ // This must be called on the system stack.
+-TEXT runtime·callCgoMmap(SB),NOSPLIT,$0
++TEXT runtime·callCgoMmap(SB),NOSPLIT,$16
+ 	MOVQ	addr+0(FP), DI
+ 	MOVQ	n+8(FP), SI
+ 	MOVL	prot+16(FP), DX
+@@ -266,7 +266,11 @@ TEXT runtime·callCgoMmap(SB),NOSPLIT,$0
+ 	MOVL	fd+24(FP), R8
+ 	MOVL	off+28(FP), R9
+ 	MOVQ	_cgo_mmap(SB), AX
++	MOVQ	SP, BX
++	ANDQ	$~15, SP	// alignment as per amd64 psABI
++	MOVQ	BX, 0(SP)
+ 	CALL	AX
++	MOVQ	0(SP), SP
+ 	MOVQ	AX, ret+32(FP)
+ 	RET
+ 
