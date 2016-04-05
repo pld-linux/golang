@@ -10,8 +10,6 @@
 # Conditional build:
 %bcond_without	tests	# build without tests [nop actually]
 %bcond_without	verbose	# verbose build (V=1)
-%bcond_with	emacs	# Go mode for Emacs
-%bcond_with	vim	# Go syntax files for Vim
 
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
@@ -49,8 +47,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define	GOARCH amd64
 %endif
 
-%define		_vimdatadir	%{_datadir}/vim
-
 %description
 Go is an open source programming environment that makes it easy to
 build simple, reliable, and efficient software.
@@ -80,35 +76,6 @@ Documentazione di go.
 
 %description doc -l pl.UTF-8
 Dokumentacja do go.
-
-%package -n vim-syntax-%{name}
-Summary:	Go syntax files for Vim
-Summary(pl.UTF-8):	Pliki składni Go dla Vima
-Group:		Applications/Editors
-Requires:	vim-rt >= 4:7.2.170
-%if "%{_rpmversion}" >= "5"
-BuildArch:	noarch
-%endif
-
-%description -n vim-syntax-%{name}
-Go syntax files for vim.
-
-%description -n vim-syntax-%{name} -l pl.UTF-8
-Pliki składni Go dla Vima.
-
-%package -n emacs-%{name}
-Summary:	Go mode for Emacs
-Summary(pl.UTF-8):	Tryb Go dla Emacsa
-Group:		Applications/Editors
-%if "%{_rpmversion}" >= "5"
-BuildArch:	noarch
-%endif
-
-%description -n emacs-%{name}
-Go mode for Emacs.
-
-%description -n emacs-%{name} -l pl.UTF-8
-Tryb Go dla Emacsa.
 
 %prep
 %setup -qc
@@ -175,18 +142,6 @@ tools="5a 5c 5g 5l"
 for tool in $tools; do
 	ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/$tool $RPM_BUILD_ROOT%{_bindir}/$tool
 done
-
-%if %{with emacs}
-install -d $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
-cp -p misc/emacs/go*.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
-%endif
-
-%if %{with vim}
-VIMFILES="syntax/go.vim ftdetect/gofiletype.vim ftplugin/go/fmt.vim ftplugin/go/import.vim indent/go.vim"
-for i in $VIMFILES; do
-	install -Dp misc/vim/$i $RPM_BUILD_ROOT%{_vimdatadir}/$i
-done
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -259,18 +214,3 @@ rm -rf $RPM_BUILD_ROOT
 %files doc
 %defattr(644,root,root,755)
 %doc doc/*
-
-%if %{with vim}
-%files -n vim-syntax-%{name}
-%defattr(644,root,root,755)
-%{_vimdatadir}/ftdetect/gofiletype.vim
-%{_vimdatadir}/ftplugin/go
-%{_vimdatadir}/indent/go.vim
-%{_vimdatadir}/syntax/go.vim
-%endif
-
-%if %{with emacs}
-%files -n emacs-%{name}
-%defattr(644,root,root,755)
-%{_datadir}/emacs/site-lisp/go-mode*.el
-%endif
