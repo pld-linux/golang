@@ -33,6 +33,7 @@ BuildRequires:	hostname
 BuildRequires:	tzdata
 %endif
 Requires:	ca-certificates
+Conflicts:	gcc-go
 ExclusiveArch:	%{ix86} %{x8664} %{arm}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
