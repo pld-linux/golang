@@ -23,7 +23,7 @@ Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
 Version:	1.6
-Release:	0.2
+Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
