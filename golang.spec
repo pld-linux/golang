@@ -13,10 +13,12 @@
 %bcond_without	tests		# build without tests [nop actually]
 %bcond_without	shared		# Build golang shared objects for stdlib
 %bcond_without	ext_linker	# Build golang using external/internal(close to cgo disabled) linking.
+%bcond_without	cgo
 
 %ifnarch %{ix86} %{x8664} %{arm} ppc64le aarch64
 %undefine	with_shared
 %undefine	with_ext_linker
+%undefine	with_cgo
 %endif
 
 Summary:	Go compiler and tools
@@ -77,6 +79,14 @@ build simple, reliable, and efficient software.
 Go to mające otwarte źródła środowisko do programowania, pozwalające
 na łatwe tworzenie prostych, pewnych i wydajnych programów.
 
+%package shared
+Summary:	Golang shared object libraries
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description shared
+Golang shared object libraries
+
 %package doc
 Summary:	Manual for go
 Summary(fr.UTF-8):	Documentation pour go
@@ -125,7 +135,9 @@ export GOARCH=%{GOARCH}
 %if %{without external_linker}
 export GO_LDFLAGS="-linkmode internal"
 %endif
-%if %{without cgo_enabled}
+%if %{with cgo}
+export CGO_ENABLED=1
+%else
 export CGO_ENABLED=0
 %endif
 
@@ -242,10 +254,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/pkg/bootstrap
 %{_libdir}/%{name}/pkg/include
 
-%if %{with shared}
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_dynlink
-%endif
-
 %if 0
 #ifarch %{x8664}
 %dir %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race
@@ -269,6 +277,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/sync
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/text
 %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/unicode
+%endif
+
+%if %{with shared}
+%files shared
+%defattr(644,root,root,755)
+%{_libdir}/%{name}/pkg/linux_%{GOARCH}_dynlink
 %endif
 
 %files doc
