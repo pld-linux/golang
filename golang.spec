@@ -22,18 +22,17 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.6
+Version:	1.6.2
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	e67833ea37fbc002fbe38efe6c1bcd98
+# Source0-md5:	d1b50fa98d9a71eeee829051411e6207
 Patch0:		ca-certs.patch
 Patch1:		%{name}-binutils.patch
 Patch2:		%{name}-1.2-verbose-build.patch
-Patch3:		mmap-cgo-stackalign.patch
 Patch4:		go1.5beta1-disable-TestGdbPython.patch
 Patch5:		go1.5-zoneinfo_testing_only.patch
 URL:		http://golang.org/
@@ -106,7 +105,6 @@ mv go/* .
 %patch0 -p1
 #%patch1 -p1 seems outdated, compiler rewritten in .go instead of .c
 %patch2 -p1
-%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 
