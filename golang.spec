@@ -5,15 +5,15 @@
 # - fix CC containing spaces (ccache)
 # - check if hg use at build time can be dropped
 # - build all target archs, subpackage them: http://golang.org/doc/install/source#environment
+#   or choose only useful crosscompilers?
 # - subpackage -src files?
-# - subpackage for "shared"?
 
 # Conditional build:
 %bcond_without	verbose		# verbose build (V=1)
 %bcond_without	tests		# build without tests [nop actually]
 %bcond_without	shared		# Build golang shared objects for stdlib
-%bcond_without	ext_linker	# Build golang using external/internal(close to cgo disabled) linking.
-%bcond_without	cgo
+%bcond_without	ext_linker	# Build golang using external/internal (close to cgo disabled) linking
+%bcond_without	cgo		# cgo (importing C libraries) support
 
 %ifnarch %{ix86} %{x8664} %{arm} ppc64le aarch64
 %undefine	with_shared
@@ -33,7 +33,6 @@ Group:		Development/Languages
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
 # Source0-md5:	bf3fce6ccaadd310159c9e874220e2a2
 Patch0:		ca-certs.patch
-Patch1:		%{name}-binutils.patch
 Patch2:		%{name}-1.2-verbose-build.patch
 Patch4:		go1.5beta1-disable-TestGdbPython.patch
 Patch5:		go1.5-zoneinfo_testing_only.patch
@@ -54,7 +53,7 @@ BuildRequires:	tzdata
 %endif
 Requires:	ca-certificates
 Conflicts:	gcc-go
-ExclusiveArch:	%{ix86} %{x8664} %{arm}
+ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips64 ppc64 ppc64le
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
@@ -70,6 +69,18 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %ifarch %{x8664}
 %define	GOARCH amd64
 %endif
+%ifarch %{arm}
+%define	GOARCH arm
+%endif
+%ifarch aarch64
+%define	GOARCH arm64
+%endif
+%ifarch mips64
+%define	GOARCH mips64x
+%endif
+%ifarch ppc64 ppc64le
+%define	GOARCH %{_arch}
+%endif
 
 %description
 Go is an open source programming environment that makes it easy to
@@ -81,39 +92,42 @@ na łatwe tworzenie prostych, pewnych i wydajnych programów.
 
 %package shared
 Summary:	Golang shared object libraries
+Summary(pl.UTF-8):	Biblioteki obiektów współdzielonych dla języka Go
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description shared
-Golang shared object libraries
+Golang shared object libraries.
+
+%description shared -l pl.UTF-8
+Biblioteki obiektów współdzielonych dla języka Go.
 
 %package doc
-Summary:	Manual for go
-Summary(fr.UTF-8):	Documentation pour go
-Summary(it.UTF-8):	Documentazione di go
-Summary(pl.UTF-8):	Podręcznik dla go
+Summary:	Documentation for Go language
+Summary(fr.UTF-8):	Documentation pour Go
+Summary(it.UTF-8):	Documentazione di Go
+Summary(pl.UTF-8):	Dokumentacja do języka Go
 Group:		Documentation
 %if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
 %endif
 
 %description doc
-Documentation for go.
+Documentation for Go language.
 
 %description doc -l fr.UTF-8
-Documentation pour go.
+Documentation pour Go.
 
 %description doc -l it.UTF-8
-Documentazione di go.
+Documentazione di Go.
 
 %description doc -l pl.UTF-8
-Dokumentacja do go.
+Dokumentacja do języka Go.
 
 %prep
 %setup -qc
-mv go/* .
+%{__mv} go/* .
 %patch0 -p1
-#%patch1 -p1 seems outdated, compiler rewritten in .go instead of .c
 %patch2 -p1
 %patch4 -p1
 %patch5 -p1
