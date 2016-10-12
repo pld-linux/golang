@@ -15,7 +15,7 @@
 %bcond_without	ext_linker	# Build golang using external/internal (close to cgo disabled) linking
 %bcond_without	cgo		# cgo (importing C libraries) support
 
-%ifnarch %{ix86} %{x8664} %{arm} ppc64le aarch64
+%ifnarch %{ix86} %{x8664} %{arm} aarch64 mips64 mips64le ppc64le
 %undefine	with_shared
 %undefine	with_ext_linker
 %undefine	with_cgo
@@ -24,14 +24,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.6.3
+Version:	1.7.1
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	bf3fce6ccaadd310159c9e874220e2a2
+# Source0-md5:	433e2158e5c28fe24b11622df393cc46
 Patch0:		ca-certs.patch
 Patch2:		%{name}-1.2-verbose-build.patch
 Patch4:		go1.5beta1-disable-TestGdbPython.patch
@@ -53,7 +53,7 @@ BuildRequires:	tzdata
 %endif
 Requires:	ca-certificates
 Conflicts:	gcc-go
-ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips64 ppc64 ppc64le
+ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips64 mips64le ppc64 ppc64le s390x
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
@@ -78,7 +78,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %ifarch mips64
 %define	GOARCH mips64x
 %endif
-%ifarch ppc64 ppc64le
+%ifarch ppc64 ppc64le s390x
 %define	GOARCH %{_arch}
 %endif
 
