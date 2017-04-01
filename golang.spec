@@ -24,17 +24,16 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.7.5
+Version:	1.8
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	506de2d870409e9003e1440bcfeb3a65
+# Source0-md5:	7743960c968760437b6e39093cfe6f67
 Patch0:		ca-certs.patch
 Patch2:		%{name}-1.2-verbose-build.patch
-Patch4:		go1.5beta1-disable-TestGdbPython.patch
 Patch5:		go1.5-zoneinfo_testing_only.patch
 URL:		http://golang.org/
 BuildRequires:	bash
@@ -129,8 +128,10 @@ Dokumentacja do języka Go.
 %{__mv} go/* .
 %patch0 -p1
 %patch2 -p1
-%patch4 -p1
 %patch5 -p1
+
+# clean patch backups
+find . -name '*.orig' | xargs -r %{__rm}
 
 cat > env.sh <<'EOF'
 # bootstrap compiler GOROOT
@@ -202,24 +203,21 @@ touch $GOROOT/pkg
 find $GOROOT/pkg | xargs touch -r $GOROOT/pkg
 
 ln -sf %{_libdir}/%{name}/bin/go $RPM_BUILD_ROOT%{_bindir}/go
-ln -sf %{_libdir}/%{name}/bin/godoc $RPM_BUILD_ROOT%{_bindir}/godoc
 ln -sf %{_libdir}/%{name}/bin/gofmt $RPM_BUILD_ROOT%{_bindir}/gofmt
-
 ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}/cgo
-ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/ebnflint $RPM_BUILD_ROOT%{_bindir}/ebnflint
 
-%ifarch %{ix86}
-tools="8a 8c 8g 8l"
-%endif
-%ifarch %{x8664}
-tools="6a 6c 6g 6l"
-%endif
-%ifarch %{arm}
-tools="5a 5c 5g 5l"
-%endif
-for tool in $tools; do
-	ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/$tool $RPM_BUILD_ROOT%{_bindir}/$tool
-done
+# FIXME: do we need whole sources, including build scripts?
+# for now, remove only non-Linux stuff
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/src/androidtest.bash \
+	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall_solaris,mksysctl_openbsd,mksysnum_{darwin,dragonfly,freebsd,netbsd,openbsd}}.pl
+# ...and tests
+%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace \
+	   $RPM_BUILD_ROOT%{_libdir}/%{name}/misc/cgo/{errors,fortran,test*}
+
+# unenvize remaining scripts
+%{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/*.bash
+%{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/*.sh
+%{__sed} -i -e '1s,/usr/bin/env perl,/usr/bin/perl,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/*.pl
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -227,33 +225,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS CONTRIBUTORS LICENSE
-%ifarch %{arm}
-%attr(755,root,root) %{_bindir}/5a
-%attr(755,root,root) %{_bindir}/5c
-%attr(755,root,root) %{_bindir}/5g
-%attr(755,root,root) %{_bindir}/5l
-%endif
-%ifarch %{x8664}
-%attr(755,root,root) %{_bindir}/6a
-%attr(755,root,root) %{_bindir}/6c
-%attr(755,root,root) %{_bindir}/6g
-%attr(755,root,root) %{_bindir}/6l
-%endif
-%ifarch %{ix86}
-%attr(755,root,root) %{_bindir}/8a
-%attr(755,root,root) %{_bindir}/8c
-%attr(755,root,root) %{_bindir}/8g
-%attr(755,root,root) %{_bindir}/8l
-%endif
 %attr(755,root,root) %{_bindir}/cgo
-%attr(755,root,root) %{_bindir}/ebnflint
 %attr(755,root,root) %{_bindir}/go
-%attr(755,root,root) %{_bindir}/godoc
 %attr(755,root,root) %{_bindir}/gofmt
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/VERSION
 %dir %{_libdir}/%{name}/bin
-%attr(755,root,root) %{_libdir}/%{name}/bin/*
+%attr(755,root,root) %{_libdir}/%{name}/bin/go
+%attr(755,root,root) %{_libdir}/%{name}/bin/gofmt
 
 %{_libdir}/%{name}/lib
 %{_libdir}/%{name}/misc
@@ -263,35 +242,31 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/pkg/obj
 %dir %{_libdir}/%{name}/pkg/tool
 %dir %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/*
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/addr2line
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/api
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/asm
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/compile
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cover
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/dist
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/doc
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/fix
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/link
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/nm
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/objdump
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pack
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pprof
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/trace
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/vet
 
-%{_libdir}/%{name}/pkg/bootstrap
+%dir %{_libdir}/%{name}/pkg/bootstrap
+%dir %{_libdir}/%{name}/pkg/bootstrap/bin
+%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/asm
+%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/compile
+%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/link
+%{_libdir}/%{name}/pkg/bootstrap/pkg
+%{_libdir}/%{name}/pkg/bootstrap/src
 %{_libdir}/%{name}/pkg/include
-
-%if 0
-#ifarch %{x8664}
-%dir %{_libdir}/%{name}/pkg/linux_%{GOARCH}_race
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/*.a
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/compress
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/container
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/crypto
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/debug
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/encoding
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/go
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/hash
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/internal
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/io
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/math
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/mime
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/net
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/os
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/path
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/regexp
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/runtime
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/sync
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/text
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}_race/unicode
-%endif
 
 %if %{with shared}
 %files shared
