@@ -14,6 +14,7 @@
 %bcond_without	shared		# Build golang shared objects for stdlib
 %bcond_without	ext_linker	# Build golang using external/internal (close to cgo disabled) linking
 %bcond_without	cgo		# cgo (importing C libraries) support
+%bcond_without	bootstrap	# bootstrap build
 
 %ifnarch %{ix86} %{x8664} %{arm} aarch64 mips64 mips64le ppc64le
 %undefine	with_shared
@@ -25,7 +26,7 @@ Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
 Version:	1.8.3
-Release:	1
+Release:	2
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
