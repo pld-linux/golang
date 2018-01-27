@@ -14,7 +14,7 @@
 %bcond_without	shared		# Build golang shared objects for stdlib
 %bcond_without	ext_linker	# Build golang using external/internal (close to cgo disabled) linking
 %bcond_without	cgo		# cgo (importing C libraries) support
-%bcond_without	bootstrap	# bootstrap build
+%bcond_with	bootstrap	# bootstrap build
 
 %ifnarch %{ix86} %{x8664} %{arm} aarch64 mips64 mips64le ppc64le
 %undefine	with_shared
