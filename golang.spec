@@ -25,17 +25,16 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.9.4
+Version:	1.10.3
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	6816441fd6680c63865cdd5cb8bc1960
+# Source0-md5:	d15dfb264105c5e84fbe33f4a4aa5021
 Patch0:		ca-certs.patch
-Patch2:		%{name}-1.2-verbose-build.patch
-Patch5:		go1.5-zoneinfo_testing_only.patch
+Patch1:		0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 URL:		http://golang.org/
 BuildRequires:	bash
 BuildRequires:	rpm-pythonprov
@@ -128,8 +127,7 @@ Dokumentacja do języka Go.
 %setup -qc
 %{__mv} go/* .
 %patch0 -p1
-%patch2 -p1
-%patch5 -p1
+%patch1 -p1
 
 # clean patch backups
 find . -name '*.orig' | xargs -r %{__rm}
@@ -246,6 +244,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/addr2line
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/api
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/asm
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/buildid
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/compile
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cover
@@ -257,12 +256,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/objdump
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pack
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pprof
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/test2json
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/trace
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/vet
 
 %dir %{_libdir}/%{name}/pkg/bootstrap
 %dir %{_libdir}/%{name}/pkg/bootstrap/bin
 %attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/asm
+%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/cgo
 %attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/compile
 %attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/link
 %{_libdir}/%{name}/pkg/bootstrap/pkg
