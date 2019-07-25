@@ -25,14 +25,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.10.8
+Version:	1.12.7
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	1a5f93f2aa6e894dbd4bed2cf88f71f2
+# Source0-md5:	49d7a658cbd825f1cfe903d050bad29f
 Patch0:		ca-certs.patch
 Patch1:		0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 URL:		http://golang.org/
@@ -208,7 +208,8 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}
 # FIXME: do we need whole sources, including build scripts?
 # for now, remove only non-Linux stuff
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/src/androidtest.bash \
-	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall_solaris,mksysctl_openbsd,mksysnum_{darwin,dragonfly,freebsd,netbsd,openbsd}}.pl
+	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall,mksysctl_openbsd,mksysnum_{darwin,dragonfly,freebsd,netbsd,openbsd}}.pl \
+	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/cmd/vendor/golang.org/x/sys/unix/{mksyscall_{aix_ppc,aix_ppc64,solaris},mksysctl_openbsd}.pl \
 # ...and tests
 %{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace \
 	   $RPM_BUILD_ROOT%{_libdir}/%{name}/misc/cgo/{errors,fortran,test*}
@@ -216,6 +217,8 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}
 # unenvize remaining scripts
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/*.bash
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/*.sh
+%{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/cmd/vendor/golang.org/x/sys/unix/*.sh
+%{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/cmd/go/*.sh
 %{__sed} -i -e '1s,/usr/bin/env perl,/usr/bin/perl,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/*.pl
 
 %clean
