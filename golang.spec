@@ -25,14 +25,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.12.7
+Version:	1.13.6
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	49d7a658cbd825f1cfe903d050bad29f
+# Source0-md5:	426db7a2b2a06f82cc0ac4818eb4f25e
 Patch0:		ca-certs.patch
 Patch1:		0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 URL:		http://golang.org/
@@ -207,9 +207,8 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}
 
 # FIXME: do we need whole sources, including build scripts?
 # for now, remove only non-Linux stuff
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/src/androidtest.bash \
-	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall,mksysctl_openbsd,mksysnum_{darwin,dragonfly,freebsd,netbsd,openbsd}}.pl \
-	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/cmd/vendor/golang.org/x/sys/unix/{mksyscall_{aix_ppc,aix_ppc64,solaris},mksysctl_openbsd}.pl \
+%{__rm} \
+	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall,mksysctl_openbsd,mksysnum_{darwin,dragonfly,freebsd,netbsd,openbsd}}.pl
 # ...and tests
 %{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace \
 	   $RPM_BUILD_ROOT%{_libdir}/%{name}/misc/cgo/{errors,fortran,test*}
@@ -263,14 +262,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/trace
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/vet
 
-%dir %{_libdir}/%{name}/pkg/bootstrap
-%dir %{_libdir}/%{name}/pkg/bootstrap/bin
-%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/asm
-%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/cgo
-%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/compile
-%attr(755,root,root) %{_libdir}/%{name}/pkg/bootstrap/bin/link
-%{_libdir}/%{name}/pkg/bootstrap/pkg
-%{_libdir}/%{name}/pkg/bootstrap/src
 %{_libdir}/%{name}/pkg/include
 
 %if %{with shared}
