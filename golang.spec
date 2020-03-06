@@ -1,3 +1,4 @@
+# NOTE: build needs >128 processes limit
 # TODO
 # - allow disabling tests (currently bcond exists just for showing which are test deps)
 # - add verbose build output (currently dummy bcond)
