@@ -213,6 +213,7 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}
 # ...and tests
 %{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace \
 	   $RPM_BUILD_ROOT%{_libdir}/%{name}/misc/cgo/{errors,fortran,test*}
+find $RPM_BUILD_ROOT%{_libdir}/%{name} -name testdata -prune | xargs %{__rm} -r
 
 # unenvize remaining scripts
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/*.bash
