@@ -108,9 +108,7 @@ Summary(fr.UTF-8):	Documentation pour Go
 Summary(it.UTF-8):	Documentazione di Go
 Summary(pl.UTF-8):	Dokumentacja do języka Go
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description doc
 Documentation for Go language.
