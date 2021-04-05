@@ -26,14 +26,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.14.9
+Version:	1.16.3
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	6f6dd1377421d27ca4bb607283b31738
+# Source0-md5:	48183a40d6522f1ea59b7d63377b7072
 Patch0:		ca-certs.patch
 Patch1:		0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 URL:		https://golang.org/
@@ -163,6 +163,10 @@ export CC="${CC#ccache }"
 export CC_FOR_TARGET="$CC"
 EOF
 
+grep -rl '#!.*env bash' . | xargs %{__sed} -i -e '1{
+	s,^#!.*bin/env bash,#!%{__bash},
+}'
+
 %if 0
 # optflags for go tools build
 nflags="\"$(echo '%{rpmcflags}' | sed -e 's/^[ 	]*//;s/[ 	]*$//;s/[ 	]\+/ /g' -e 's/ /\",\"/g')\""
@@ -207,7 +211,7 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}
 # FIXME: do we need whole sources, including build scripts?
 # for now, remove only non-Linux stuff
 %{__rm} \
-	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall,mksysctl_openbsd,mksysnum_{darwin,dragonfly,freebsd,netbsd,openbsd}}.pl
+	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall,mksysctl_openbsd,mksysnum_{dragonfly,freebsd,netbsd,openbsd}}.pl
 # ...and tests
 %{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace \
 	   $RPM_BUILD_ROOT%{_libdir}/%{name}/misc/cgo/{errors,fortran,test*}
