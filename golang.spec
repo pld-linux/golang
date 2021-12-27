@@ -49,11 +49,12 @@ BuildRequires:	golang >= 1.4
 BuildRequires:	glibc-static
 BuildRequires:	hostname
 BuildRequires:	pcre-devel
+BuildRequires:	rpmbuild(macros) >= 2.007
 BuildRequires:	tzdata
 %endif
 Requires:	ca-certificates
 Conflicts:	gcc-go
-ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips64 mips64le ppc64 ppc64le s390x
+ExclusiveArch:	%{ix86} %{x8664} %{armv5} %{armv6} %{armv7} aarch64 mips64 mips64le ppc64 ppc64le s390x
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
@@ -69,8 +70,17 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %ifarch %{x8664}
 %define	GOARCH amd64
 %endif
-%ifarch %{arm}
+%ifarch %{armv5}
 %define	GOARCH arm
+%define	GOARM 5
+%endif
+%ifarch %{armv6}
+%define	GOARCH arm
+%define	GOARM 6
+%endif
+%ifarch %{armv7}
+%define	GOARCH arm
+%define	GOARM 7
 %endif
 %ifarch aarch64
 %define	GOARCH arm64
@@ -145,6 +155,7 @@ export GOHOSTARCH=%{GOARCH}
 
 export GOOS=linux
 export GOARCH=%{GOARCH}
+%{?GOARM:export GOARM=%{GOARM}}
 %if %{without external_linker}
 export GO_LDFLAGS="-linkmode internal"
 %endif
