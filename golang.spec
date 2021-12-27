@@ -38,6 +38,7 @@ Patch0:		ca-certs.patch
 Patch1:		0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 URL:		https://golang.org/
 BuildRequires:	bash
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
 # The compiler is written in Go. Needs go(1.4+) compiler for build.
 %if %{with bootstrap}
