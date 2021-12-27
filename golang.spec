@@ -54,7 +54,7 @@ BuildRequires:	tzdata
 %endif
 Requires:	ca-certificates
 Conflicts:	gcc-go
-ExclusiveArch:	%{ix86} %{x8664} %{armv5} %{armv6} %{armv7} aarch64 mips64 mips64le ppc64 ppc64le s390x
+ExclusiveArch:	%{ix86} %{x8664} %{armv5} %{armv6} %{armv7} aarch64 mips mipsel mips64 mips64el ppc64 ppc64le riscv64 s390x
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
@@ -85,10 +85,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %ifarch aarch64
 %define	GOARCH arm64
 %endif
-%ifarch mips64
-%define	GOARCH mips64x
+%ifarch mipsel
+%define	GOARCH mipsle
 %endif
-%ifarch ppc64 ppc64le s390x
+%ifarch mips64el
+%define	GOARCH mips64le
+%endif
+%ifarch mips mips64 ppc64 ppc64le riscv64 s390x
 %define	GOARCH %{_arch}
 %endif
 
