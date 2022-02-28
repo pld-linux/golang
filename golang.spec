@@ -160,7 +160,7 @@ export GOHOSTARCH=%{GOARCH}
 export GOOS=linux
 export GOARCH=%{GOARCH}
 %{?GOARM:export GOARM=%{GOARM}}
-%if %{without external_linker}
+%if %{without ext_linker}
 export GO_LDFLAGS="-linkmode internal"
 %endif
 %if %{with cgo}
