@@ -160,6 +160,13 @@ export GOHOSTARCH=%{GOARCH}
 export GOOS=linux
 export GOARCH=%{GOARCH}
 %{?GOARM:export GOARM=%{GOARM}}
+%ifarch %{ix86}
+%ifarch %{x86_with_sse2}
+export GO386=sse2
+%else
+export GO386=softfloat
+%endif
+%endif
 %if %{without ext_linker}
 export GO_LDFLAGS="-linkmode internal"
 %endif
