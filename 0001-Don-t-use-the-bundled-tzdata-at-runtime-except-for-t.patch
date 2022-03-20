@@ -29,7 +29,7 @@ index 76d5524124..e81ace5f64 100644
 -	z, err := loadLocation("America/Los_Angeles", zoneSources[len(zoneSources)-1:])
 +	z, err := loadLocation("America/Los_Angeles", zoneSources)
  	if err != nil {
- 		panic("cannot load America/Los_Angeles for testing: " + err.Error())
+ 		panic("cannot load America/Los_Angeles for testing: " + err.Error() + "; you may want to use -tags=timetzdata")
  	}
 @@ -21,8 +23,9 @@ func initTestingZone() {
  var OrigZoneSources = zoneSources
