@@ -26,16 +26,15 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.18.8
+Version:	1.19.4
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://golang.org/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	4da6e6a0f709a4fe9f5b1033a8439a09
+# Source0-md5:	1577a8d801746d1c3fc165f0d3a27230
 Patch0:		ca-certs.patch
-Patch1:		0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 URL:		https://golang.org/
 BuildRequires:	bash
 BuildRequires:	rpm-build >= 4.6
@@ -140,7 +139,6 @@ Dokumentacja do języka Go.
 %setup -qc
 %{__mv} go/* .
 %patch0 -p1
-%patch1 -p1
 
 # clean patch backups
 find . -name '*.orig' | xargs -r %{__rm}
@@ -251,7 +249,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS CONTRIBUTORS LICENSE
+%doc CONTRIBUTING.md LICENSE README.md
 %attr(755,root,root) %{_bindir}/cgo
 %attr(755,root,root) %{_bindir}/go
 %attr(755,root,root) %{_bindir}/gofmt
