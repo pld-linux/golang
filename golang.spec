@@ -26,16 +26,16 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.19.6
+Version:	1.20.1
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
-# Source0Download: https://golang.org/dl/
+# Source0Download: https://go.dev/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	280d7f5b4aabb327cca328bcb1a6279e
+# Source0-md5:	06544356f41811af9e73797d6962793c
 Patch0:		ca-certs.patch
-URL:		https://golang.org/
+URL:		https://go.dev/
 BuildRequires:	bash
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
@@ -197,7 +197,7 @@ nflags="\"$(echo '%{rpmcflags}' | sed -e 's/^[ 	]*//;s/[ 	]*$//;s/[ 	]\+/ /g' -e
 %build
 . ./env.sh
 cd src
-./make.bash --no-clean
+./make.bash
 cd ..
 
 # build shared std lib
@@ -263,16 +263,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/misc
 %{_libdir}/%{name}/src
 %dir %{_libdir}/%{name}/pkg
-%{_libdir}/%{name}/pkg/linux_%{GOARCH}
-%{_libdir}/%{name}/pkg/obj
-%dir %{_libdir}/%{name}/pkg/tool
-%dir %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/addr2line
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/api
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/asm
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/buildid
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/compile
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/covdata
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cover
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/dist
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/doc
