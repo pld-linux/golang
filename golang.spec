@@ -38,7 +38,6 @@ Patch0:		ca-certs.patch
 URL:		https://go.dev/
 BuildRequires:	bash
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpm-pythonprov
 # The compiler is written in Go. Needs go(1.4+) compiler for build.
 %if %{with bootstrap}
 BuildRequires:	gcc-go >= 6:5
