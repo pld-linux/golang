@@ -26,14 +26,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.20.7
+Version:	1.21.0
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://go.dev/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	680f266a25cab081df0c335922da98b1
+# Source0-md5:	6e1434a2faadf3a7b6698d3735856f46
 Patch0:		ca-certs.patch
 URL:		https://go.dev/
 BuildRequires:	bash
@@ -232,15 +232,13 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}
 %{__rm} \
 	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall,mksysctl_openbsd,mksysnum_{dragonfly,freebsd,netbsd,openbsd}}.pl
 # ...and tests
-%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace \
-	   $RPM_BUILD_ROOT%{_libdir}/%{name}/misc/cgo/{errors,fortran,test*}
+%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace
 find $RPM_BUILD_ROOT%{_libdir}/%{name} -name testdata -prune | xargs %{__rm} -r
 
 # unenvize remaining scripts
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/*.bash
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/*.sh
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/cmd/vendor/golang.org/x/sys/unix/*.sh
-%{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/cmd/go/*.sh
 %{__sed} -i -e '1s,/usr/bin/env perl,/usr/bin/perl,' $RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/*.pl
 
 %clean
@@ -272,6 +270,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/covdata
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cover
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/dist
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/distpack
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/doc
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/fix
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/link
