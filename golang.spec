@@ -2,7 +2,6 @@
 # TODO
 # - allow disabling tests (currently bcond exists just for showing which are test deps)
 # - add verbose build output (currently dummy bcond)
-# - setup GOMAXPROCS=2 from _smp_mflags
 # - fix CC containing spaces (ccache)
 # - check if hg use at build time can be dropped
 # - build all target archs, subpackage them: http://golang.org/doc/install/source#environment
@@ -180,6 +179,7 @@ export LDFLAGS="%{rpmldflags}"
 CC="%{__cc}"
 export CC="${CC#ccache }"
 export CC_FOR_TARGET="$CC"
+%{?__jobs:export GOMAXPROCS=%{__jobs}}
 EOF
 
 grep -rl '#!.*env bash' . | xargs %{__sed} -i -e '1{
