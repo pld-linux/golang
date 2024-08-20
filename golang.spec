@@ -25,14 +25,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.22.6
+Version:	1.23.0
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://go.dev/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	382827d970e80d4b918d19b749165f9f
+# Source0-md5:	3c89362bffc2819f95eea2ba5511dd37
 Patch0:		ca-certs.patch
 URL:		https://go.dev/
 BuildRequires:	bash
@@ -279,6 +279,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/objdump
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pack
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pprof
+%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/preprofile
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/test2json
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/trace
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/vet
