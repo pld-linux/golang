@@ -136,7 +136,7 @@ Dokumentacja do języka Go.
 %prep
 %setup -qc
 %{__mv} go/* .
-%patch0 -p1
+%patch -P0 -p1
 
 # clean patch backups
 find . -name '*.orig' | xargs -r %{__rm}
