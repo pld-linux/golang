@@ -25,14 +25,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.24.6
+Version:	1.25.1
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://go.dev/dl/
 Source0:	https://storage.googleapis.com/golang/go%{version}.src.tar.gz
-# Source0-md5:	29b0067b2ea8cbcb18f28e1cd5d4ab3c
+# Source0-md5:	86ac635cc05683ae97c77bbeae5bd884
 Patch0:		ca-certs.patch
 URL:		https://go.dev/
 BuildRequires:	bash
@@ -263,25 +263,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{name}/pkg
 %dir %{_libdir}/%{name}/pkg/tool
 %dir %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/addr2line
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/asm
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/buildid
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/compile
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/covdata
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cover
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/dist
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/distpack
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/doc
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/fix
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/link
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/nm
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/objdump
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pack
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/pprof
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/preprofile
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/test2json
-%attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/trace
 %attr(755,root,root) %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/vet
 
 %{_libdir}/%{name}/pkg/include
