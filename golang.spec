@@ -26,7 +26,7 @@ Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
 Version:	1.25.1
-Release:	1
+Release:	2
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
@@ -232,7 +232,7 @@ ln -sf %{_libdir}/%{name}/pkg/tool/linux_%{GOARCH}/cgo $RPM_BUILD_ROOT%{_bindir}
 %{__rm} \
 	$RPM_BUILD_ROOT%{_libdir}/%{name}/src/syscall/{mksyscall,mksysctl_openbsd,mksysnum_{dragonfly,freebsd,netbsd,openbsd}}.pl
 # ...and tests
-%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/src/internal/trace
+find $RPM_BUILD_ROOT%{_libdir}/%{name} -name '*_test.go' | xargs grep -l testing | xargs %{__rm}
 find $RPM_BUILD_ROOT%{_libdir}/%{name} -name testdata -prune | xargs %{__rm} -r
 
 # unenvize remaining scripts
