@@ -25,14 +25,14 @@
 Summary:	Go compiler and tools
 Summary(pl.UTF-8):	Kompilator języka Go i narzędzia
 Name:		golang
-Version:	1.26.5
+Version:	1.26.6
 Release:	1
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:	BSD and Public Domain
 Group:		Development/Languages
 # Source0Download: https://go.dev/dl/
 Source0:	https://dl.google.com/go/go%{version}.src.tar.gz
-# Source0-md5:	ff03d7ab678c97c62dc84b41fdd317a4
+# Source0-md5:	8c7d82daea174cc1608643cfd5e623aa
 Patch0:		ca-certs.patch
 URL:		https://go.dev/
 BuildRequires:	bash
